@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,15 +45,18 @@ public class SecondaryController {
     private Stage stage;
 
     @FXML
-    private void addItem(){
+    private boolean addItem(){
         String itemName = itemNameTextField.getText().replace('-', ' ');
         String calories = calorieTextField.getText();
-        if(itemName.length() > 0) {
-            foodList.getItems().add(itemName + " - " + calories);
+        Pattern pattern = Pattern.compile("0*[1-9][0-9]*");
+        if(itemName.length() > 0 && calories.matches(pattern.pattern())) {
+            foodList.getItems().add(itemName + " - " + calories.replaceAll("^0*",""));
             itemNameTextField.clear();
             calorieTextField.clear();
             foodList.getItems().sort(String::compareTo);
+            return true;
         }
+        return false;
     }
 
     @FXML
@@ -68,7 +72,6 @@ public class SecondaryController {
             String[] itemInfo = foodList.getSelectionModel().getSelectedItem().split(" - ");
             itemNameTextField.setText(itemInfo[0]);
             calorieTextField.setText(itemInfo[1]);
-            buttonVBox.getChildren().retainAll();
             foodList.setDisable(true);
 
             saveButton = new Button("Save");
@@ -79,7 +82,7 @@ public class SecondaryController {
             cancelButton.setPrefWidth(addItemButton.getWidth());
             saveButton.setOnAction(event -> save());
             cancelButton.setOnAction(event -> cancel());
-            buttonVBox.getChildren().addAll(saveButton,cancelButton);
+            buttonVBox.getChildren().setAll(saveButton,cancelButton);
         }
     }
 
@@ -91,15 +94,15 @@ public class SecondaryController {
     }
 
     private void save(){
-        int selection = foodList.getSelectionModel().getSelectedIndex();
-        foodList.getItems().remove(selection);
-        addItem();
-        cancel();
+        String selection = foodList.getSelectionModel().getSelectedItem();
+        if(addItem()){
+            foodList.getItems().remove(selection);
+            cancel();
+        }
     }
 
     private void cancel(){
-        buttonVBox.getChildren().retainAll();
-        buttonVBox.getChildren().addAll(addItemButton,removeItemButton,updateItemButton,addMealButton,closeButton);
+        buttonVBox.getChildren().setAll(addItemButton,removeItemButton,updateItemButton,addMealButton,closeButton);
         itemNameTextField.clear();
         calorieTextField.clear();
         foodList.getSelectionModel().clearSelection();
