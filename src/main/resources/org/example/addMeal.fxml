@@ -6,10 +6,10 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.SecondaryController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.SecondaryController">
    <children>
       <Label layoutX="147.0" layoutY="14.0" text="Add A New Meal" textFill="WHITE">
          <font>
@@ -25,11 +25,15 @@
       <TextField fx:id="itemNameTextField" layoutX="40.0" layoutY="149.0" />
       <Label layoutX="248.0" layoutY="132.0" text="Calories:" textFill="WHITE" />
       <TextField fx:id="calorieTextField" layoutX="248.0" layoutY="149.0" prefHeight="25.0" prefWidth="167.0" />
-      <Button fx:id="addItemButton" layoutX="40.0" layoutY="188.0" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" text="Add Item" />
-      <Button fx:id="removeItemButton" layoutX="39.0" layoutY="228.0" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
-      <Button fx:id="updateItemButton" layoutX="39.0" layoutY="267.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Update Item" />
-      <Button fx:id="addMealButton" layoutX="38.0" layoutY="306.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Add Meal" />
-      <Button fx:id="closeButton" layoutX="38.0" layoutY="344.0" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" text="Close" />
-      <ListView fx:id="foodList" layoutX="248.0" layoutY="188.0" prefHeight="183.0" prefWidth="167.0" />
+      <ListView fx:id="foodList" layoutX="248.0" layoutY="188.0" prefHeight="168.0" prefWidth="167.0" />
+      <VBox fx:id="buttonVBox" layoutX="40.0" layoutY="188.0" prefHeight="183.0" prefWidth="149.0" spacing="10.0">
+         <children>
+            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" text="Add Item" />
+            <Button fx:id="removeItemButton" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
+            <Button fx:id="updateItemButton" mnemonicParsing="false" onAction="#updateItem" prefHeight="25.0" prefWidth="149.0" text="Update Item" />
+            <Button fx:id="addMealButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Add Meal" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" text="Close" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
