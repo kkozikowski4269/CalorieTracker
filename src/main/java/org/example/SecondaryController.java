@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.model.FoodItem;
 
 public class SecondaryController {
     @FXML
@@ -38,7 +40,7 @@ public class SecondaryController {
     @FXML
     private TextField calorieTextField;
     @FXML
-    private ListView<String> foodList;
+    private ListView<FoodItem> foodList;
 
     @FXML
     private VBox buttonVBox;
@@ -50,10 +52,11 @@ public class SecondaryController {
         String calories = calorieTextField.getText();
         Pattern pattern = Pattern.compile("0*[1-9][0-9]*");
         if(itemName.length() > 0 && calories.matches(pattern.pattern())) {
-            foodList.getItems().add(itemName + " - " + calories.replaceAll("^0*",""));
+            foodList.getItems().add(new FoodItem(itemName, Integer.parseInt(calories)));
             itemNameTextField.clear();
             calorieTextField.clear();
-            foodList.getItems().sort(String::compareTo);
+            Collections.sort(foodList.getItems());
+            foodList.getSelectionModel().clearSelection();
             return true;
         }
         return false;
@@ -61,7 +64,7 @@ public class SecondaryController {
 
     @FXML
     private void removeItem(){
-        String toRemove = foodList.getSelectionModel().getSelectedItem();
+        FoodItem toRemove = foodList.getSelectionModel().getSelectedItem();
         foodList.getItems().remove(toRemove);
         foodList.getSelectionModel().clearSelection();
     }
@@ -69,9 +72,9 @@ public class SecondaryController {
     @FXML
     private void updateItem(){
         if(foodList.getSelectionModel().getSelectedItem() != null) {
-            String[] itemInfo = foodList.getSelectionModel().getSelectedItem().split(" - ");
-            itemNameTextField.setText(itemInfo[0]);
-            calorieTextField.setText(itemInfo[1]);
+            FoodItem foodItem = foodList.getSelectionModel().getSelectedItem();
+            itemNameTextField.setText(foodItem.getName());
+            calorieTextField.setText(String.valueOf(foodItem.getCalories()));
             foodList.setDisable(true);
 
             saveButton = new Button("Save");
@@ -94,7 +97,7 @@ public class SecondaryController {
     }
 
     private void save(){
-        String selection = foodList.getSelectionModel().getSelectedItem();
+        FoodItem selection = foodList.getSelectionModel().getSelectedItem();
         if(addItem()){
             foodList.getItems().remove(selection);
             cancel();
