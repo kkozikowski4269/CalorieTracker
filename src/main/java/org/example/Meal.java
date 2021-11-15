@@ -1,4 +1,6 @@
-package org.example.model;
+package org.example;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 
 /**
@@ -10,23 +12,22 @@ public class Meal
     private static int numMeals = 0;
     private String name;
     private ArrayList<FoodItem> foodItems;
+    private int calories;
 
-    public Meal()
-    {
-        this.foodItems = new ArrayList<>();
-    }
+    public Meal(){}
 
     public Meal(String name)
     {
         this.name = name;
         this.foodItems = new ArrayList<>();
+        this.calories = 0;
     }
-
+    @JsonIgnore
     public static final int getNumMeals()
     {
         return numMeals;
     }
-
+    @JsonIgnore
     public static void setNumMeals(int num)
     {
         numMeals = num;
@@ -44,25 +45,24 @@ public class Meal
 
     public int getCalories()
     {
-        int cals = 0;
+        return this.calories;
+    }
 
-        for(FoodItem item : this.getAll())
-        {
-            cals += item.getCalories();
-        }
-        return cals;
+    public void setCalories(int calories){
+        this.calories = calories;
     }
 
     public void addItem(FoodItem item)
     {
         this.foodItems.add(item);
+        this.calories+=item.getCalories();
     }
 
     public FoodItem removeItem(int pos)
     {
         FoodItem removed = this.foodItems.get(pos);
         this.foodItems.remove(pos);
-
+        this.calories-=removed.getCalories();
         return removed;
     }
 
@@ -70,12 +70,13 @@ public class Meal
     {
         this.foodItems.removeAll(foodItems);
     }
-
+    @JsonIgnore
     public final FoodItem getItem(int pos)
     {
         return this.foodItems.get(pos);
     }
 
+    @JsonIgnore
     public final FoodItem getItem(String name)
     {
         for(FoodItem item : this.foodItems)
@@ -87,7 +88,7 @@ public class Meal
         }
         return new FoodItem("ERROR", -1);
     }
-
+    @JsonIgnore
     public void setItem(int pos, FoodItem newItem)
     {
         FoodItem oldItem = this.foodItems.get(pos);
@@ -96,12 +97,12 @@ public class Meal
         oldItem.setCalories(newItem.getCalories());
     }
 
-    public void setAll(ArrayList<FoodItem> foodItems)
+    public void setFoodItems(ArrayList<FoodItem> foodItems)
     {
         this.foodItems = foodItems;
     }
 
-    public final ArrayList<FoodItem> getAll()
+    public final ArrayList<FoodItem> getFoodItems()
     {
         return this.foodItems;
     }

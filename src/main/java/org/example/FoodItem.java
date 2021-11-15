@@ -1,4 +1,4 @@
-package org.example.model;
+package org.example;
 
 /**
  *
@@ -8,6 +8,8 @@ public class FoodItem implements Comparable<FoodItem>
 {
     private String name;
     private int calories;
+
+    public FoodItem(){}
 
     public FoodItem(String name, int calories)
     {
