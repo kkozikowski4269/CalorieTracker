@@ -94,8 +94,8 @@ public class AddMealController {
         if(PrimaryController.getCurrentDaySelection() != null) {
             PrimaryController.getCurrentDaySelection().addMeal(meal);
         }else{
-            Day day = new Day(dao.getDate().getDayOfWeek().toString());
-            day.setDate(dao.getDate().toString());
+            Day day = new Day(PrimaryController.getDate().getDayOfWeek().toString());
+            day.setDate(PrimaryController.getDate().toString());
             day.addMeal(meal);
             dao.getAll().add(day);
         }

@@ -32,6 +32,7 @@ public class PrimaryController {
     private Stage stage;
     private static Meal currentMealSelection = null;
     private static Day currentDaySelection = null;
+    private static LocalDate currentDateSelection = null;
 
     @FXML
     public void initialize(){
@@ -39,11 +40,11 @@ public class PrimaryController {
 
         // setValue of DatePicker to today's date when opening the first time, otherwise use dao to keep track of the
         // when switching back from another scene
-        if(dao.getDate() == null) {
+        if(getDate() == null) {
             this.datePicker.setValue(LocalDate.now());
-            dao.setDate(datePicker.getValue());
+            setDate(datePicker.getValue());
         }else{
-            this.datePicker.setValue(dao.getDate());
+            this.datePicker.setValue(getDate());
         }
 
         if(dao.getFile() == null){
@@ -76,6 +77,7 @@ public class PrimaryController {
             ViewMealController viewMealController = loader.getController();
             stage.setScene(viewMealScene);
             viewMealController.setDate(this.datePicker.getValue().toString());
+
         }
     }
 
@@ -94,7 +96,7 @@ public class PrimaryController {
     public void pickDate(){
         try {
             this.loadData();
-            DayDAO.getInstance().setDate(this.datePicker.getValue());
+            setDate(this.datePicker.getValue());
         }catch (IOException e){
             System.err.println("Could not set Data: " + e);
         }
@@ -126,5 +128,13 @@ public class PrimaryController {
 
     public static Day getCurrentDaySelection(){
         return currentDaySelection;
+    }
+
+    public static void setDate(LocalDate date){
+        currentDateSelection = date;
+    }
+
+    public static LocalDate getDate(){
+        return currentDateSelection;
     }
 }
