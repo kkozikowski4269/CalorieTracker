@@ -22,7 +22,6 @@ public class DayDAO implements DAO<Day>
     private String fName;
     private File file;
     private static final DayDAO dao = new DayDAO();
-    private LocalDate date;
 
     private DayDAO(){
         this.fName = null;
@@ -67,19 +66,30 @@ public class DayDAO implements DAO<Day>
 
     @Override
     public Day get(int pos) {
-        return null;
+        if(this.days != null && this.days.size() > 0){
+            return this.days.get(pos);
+        }else{
+            return null;
+        }
     }
 
     @Override
     public boolean delete(Day day) {
+        if(this.days.contains(day)) {
+            this.days.remove(day);
+            return true;
+        }
         return false;
     }
 
     @Override
-    public boolean update(Day day) {
+    public boolean update(Day day, Day newDay) {
+        if (this.days.contains(day)) {
+            this.days.set(this.days.indexOf(day),newDay);
+            return true;
+        }
         return false;
     }
-
     @Override
     public boolean save(Day day) {
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -109,13 +119,5 @@ public class DayDAO implements DAO<Day>
         }catch(IOException e){
             System.err.println("Failed to save data: " + e);
         }
-    }
-
-    public void setDate(LocalDate date){
-        this.date = date;
-    }
-
-    public LocalDate getDate(){
-        return this.date;
     }
 }

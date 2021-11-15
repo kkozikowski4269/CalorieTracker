@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
@@ -38,6 +39,9 @@ public class AddMealController {
 
     @FXML
     private VBox buttonVBox;
+
+    private Day day;
+    private LocalDate date;
 
     @FXML
     private boolean addItem(){
@@ -91,11 +95,11 @@ public class AddMealController {
             meal.addItem(i);
         }
         DayDAO dao = DayDAO.getInstance();
-        if(PrimaryController.getCurrentDaySelection() != null) {
-            PrimaryController.getCurrentDaySelection().addMeal(meal);
+        if(this.day != null) {
+            this.day.addMeal(meal);
         }else{
-            Day day = new Day(dao.getDate().getDayOfWeek().toString());
-            day.setDate(dao.getDate().toString());
+            Day day = new Day(this.date.getDayOfWeek().toString());
+            day.setDate(this.date.toString());
             day.addMeal(meal);
             dao.getAll().add(day);
         }
@@ -108,6 +112,8 @@ public class AddMealController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
+        PrimaryController primaryController = loader.getController();
+        primaryController.setDate(this.date);
     }
 
     // save the update to a food item
@@ -126,5 +132,10 @@ public class AddMealController {
         calorieTextField.clear();
         foodList.getSelectionModel().clearSelection();
         foodList.setDisable(false);
+    }
+
+    public void loadData(Day day, LocalDate date){
+        this.day = day;
+        this.date = date;
     }
 }

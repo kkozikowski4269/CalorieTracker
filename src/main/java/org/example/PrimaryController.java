@@ -30,8 +30,9 @@ public class PrimaryController {
     private DatePicker datePicker;
 
     private Stage stage;
-    private static Meal currentMealSelection = null;
-    private static Day currentDaySelection = null;
+    private Meal currentMealSelection = null;
+    private Day currentDaySelection = null;
+    private LocalDate currentDateSelection = null;
 
     @FXML
     public void initialize(){
@@ -39,11 +40,11 @@ public class PrimaryController {
 
         // setValue of DatePicker to today's date when opening the first time, otherwise use dao to keep track of the
         // when switching back from another scene
-        if(dao.getDate() == null) {
+        if(getDate() == null) {
             this.datePicker.setValue(LocalDate.now());
-            dao.setDate(datePicker.getValue());
+            setDate(datePicker.getValue());
         }else{
-            this.datePicker.setValue(dao.getDate());
+            this.datePicker.setValue(getDate());
         }
 
         if(dao.getFile() == null){
@@ -52,7 +53,7 @@ public class PrimaryController {
         }
 
         try {
-            this.loadData();
+            this.loadData(this.getDate());
         }catch (IOException e){
             System.err.println("Could not set Data: " + e);
         }
@@ -64,18 +65,20 @@ public class PrimaryController {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene addMealScene = new Scene(loader.load());
         stage.setScene(addMealScene);
+        AddMealController addMealController = loader.getController();
+        addMealController.loadData(this.getCurrentDaySelection(), this.getDate());
     }
 
     @FXML
     public void openMealViewer(ActionEvent event) throws IOException {
-        currentMealSelection = this.mealList.getSelectionModel().getSelectedItem();
+        this.currentMealSelection = this.mealList.getSelectionModel().getSelectedItem();
         if(currentMealSelection != null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("viewMeal.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene viewMealScene = new Scene(loader.load());
             ViewMealController viewMealController = loader.getController();
             stage.setScene(viewMealScene);
-            viewMealController.setDate(this.datePicker.getValue().toString());
+            viewMealController.loadData(this.getCurrentMealSelection(), this.getDate());
         }
     }
 
@@ -93,38 +96,42 @@ public class PrimaryController {
     @FXML
     public void pickDate(){
         try {
-            this.loadData();
-            DayDAO.getInstance().setDate(this.datePicker.getValue());
+            setDate(this.datePicker.getValue());
+            this.loadData(this.getDate());
         }catch (IOException e){
             System.err.println("Could not set Data: " + e);
         }
     }
 
     // get data from json file and populate the meal ListView with that data
-    private void loadData() throws IOException {
+    private void loadData(LocalDate date) throws IOException {
         DayDAO dao = DayDAO.getInstance();
-        List<Day> days = dao.getAll();
-        currentDaySelection = null;
-        int i = 0;
-        while(i < days.size() && currentDaySelection == null)
-        {
-            if(days.get(i).getDate().equals(this.datePicker.getValue().toString())){
-                currentDaySelection = days.get(i);
-            }
-            i++;
-        }
-        if(currentDaySelection != null) {
-            this.mealList.setItems(FXCollections.observableArrayList(currentDaySelection.getMeals()));
-        }else{
+        Day d = new Day();
+        d.setDate(date.toString());
+        int dayIndex = dao.getAll().indexOf(d);
+        if(dayIndex == -1) {
+            currentDaySelection = null;
             this.mealList.getItems().clear();
+        }else{
+            currentDaySelection = dao.get(dayIndex);
+            this.mealList.setItems(FXCollections.observableArrayList(currentDaySelection.getMeals()));
         }
     }
 
-    public static Meal getCurrentMealSelection(){
-        return currentMealSelection;
+    public Meal getCurrentMealSelection(){
+        return this.currentMealSelection;
     }
 
-    public static Day getCurrentDaySelection(){
-        return currentDaySelection;
+    public Day getCurrentDaySelection(){
+        return this.currentDaySelection;
+    }
+
+    public void setDate(LocalDate date){
+        this.currentDateSelection = date;
+        this.datePicker.setValue(date);
+    }
+
+    public LocalDate getDate(){
+        return this.currentDateSelection;
     }
 }

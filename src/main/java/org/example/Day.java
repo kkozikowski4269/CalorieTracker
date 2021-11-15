@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Day {
     private String name;
@@ -62,5 +63,18 @@ public class Day {
                 "name='" + name + '\'' +
                 ", meals=" + meals +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Day)) return false;
+        Day day = (Day) o;
+        return getDate().equals(day.getDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDate());
     }
 }

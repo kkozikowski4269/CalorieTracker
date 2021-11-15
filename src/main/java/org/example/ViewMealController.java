@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
@@ -42,10 +43,10 @@ public class ViewMealController {
     @FXML
     VBox buttonVBox;
 
-    private String date;
+    private LocalDate date;
+    private Meal meal;
 
     public void initialize(){
-        this.loadData();
     }
 
     @FXML
@@ -93,8 +94,7 @@ public class ViewMealController {
 
     @FXML
     public void updateMeal(ActionEvent event) throws IOException {
-        Meal meal = PrimaryController.getCurrentMealSelection();
-        meal.setFoodItems(new ArrayList<>(this.foodList.getItems()));
+        this.meal.setFoodItems(new ArrayList<>(this.foodList.getItems()));
         DayDAO.getInstance().saveAll();
         this.close(event);
     }
@@ -104,19 +104,22 @@ public class ViewMealController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
+        PrimaryController primaryController = loader.getController();
+        primaryController.setDate(this.date);
     }
 
-    private void loadData(){
-        Meal meal = PrimaryController.getCurrentMealSelection();
+    public void loadData(Meal meal, LocalDate date){
+        this.date = date;
+        this.meal = meal;
         this.mealNameTextField.setText(meal.getName());
         this.foodList.setItems(FXCollections.observableArrayList(meal.getFoodItems()));
     }
 
-    public void setDate(String date){
+    public void setDate(LocalDate date){
         this.date = date;
     }
 
-    public String getDate() { return this.date; }
+    public LocalDate getDate() { return this.date; }
 
     // save the update to a food item
     private void save(){
