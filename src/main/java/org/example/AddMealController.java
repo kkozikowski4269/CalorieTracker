@@ -15,7 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class SecondaryController {
+public class AddMealController {
     @FXML
     private Button addItemButton;
     @FXML
@@ -26,9 +26,6 @@ public class SecondaryController {
     private Button addMealButton;
     @FXML
     private Button closeButton;
-
-    private Button saveButton;
-    private Button cancelButton;
 
     @FXML
     private TextField mealNameTextField;
@@ -41,10 +38,6 @@ public class SecondaryController {
 
     @FXML
     private VBox buttonVBox;
-
-    private String date;
-    private Stage stage;
-    private Integer dayIndex;
 
     @FXML
     private boolean addItem(){
@@ -77,51 +70,44 @@ public class SecondaryController {
             calorieTextField.setText(String.valueOf(foodItem.getCalories()));
             foodList.setDisable(true);
 
-            saveButton = new Button("Save");
-            cancelButton = new Button("Cancel");
+            Button saveButton = new Button("Save");
+            Button cancelButton = new Button("Cancel");
+
             saveButton.setStyle(addItemButton.getStyle());
             cancelButton.setStyle(addItemButton.getStyle());
             saveButton.setPrefWidth(addItemButton.getWidth());
             cancelButton.setPrefWidth(addItemButton.getWidth());
             saveButton.setOnAction(event -> save());
             cancelButton.setOnAction(event -> cancel());
-            buttonVBox.getChildren().setAll(saveButton,cancelButton);
+            buttonVBox.getChildren().setAll(saveButton, cancelButton);
         }
     }
 
     @FXML
-    private void addMeal(ActionEvent event){
+    private void addMeal(ActionEvent event) throws IOException {
         Meal meal = new Meal(this.mealNameTextField.getText());
 
         for(FoodItem i : foodList.getItems()) {
             meal.addItem(i);
         }
         DayDAO dao = DayDAO.getInstance();
-        if(this.dayIndex != null) {
-            dao.getAll().get(this.dayIndex).addMeal(meal);
+        if(PrimaryController.getCurrentDaySelection() != null) {
+            PrimaryController.getCurrentDaySelection().addMeal(meal);
         }else{
-            Day day = new Day("Day");
-            day.setDate(this.date);
+            Day day = new Day(dao.getDate().getDayOfWeek().toString());
+            day.setDate(dao.getDate().toString());
             day.addMeal(meal);
             dao.getAll().add(day);
         }
         dao.saveAll();
-        try {
-            close(event);
-        }catch (IOException e){
-            System.err.println(e);
-        }
-
+        close(event);
     }
 
     @FXML
     public void close(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
-        PrimaryController primaryController = loader.getController();
-        String[] dateDate = this.date.split("-");
-        primaryController.setDate(Integer.parseInt(dateDate[0]),Integer.parseInt(dateDate[1]),Integer.parseInt(dateDate[2]));
     }
 
     // save the update to a food item
@@ -140,15 +126,5 @@ public class SecondaryController {
         calorieTextField.clear();
         foodList.getSelectionModel().clearSelection();
         foodList.setDisable(false);
-    }
-
-    public void setDate(String date){
-        this.date = date;
-    }
-
-    public String getDate() { return this.date; }
-
-    public void setDayIndex(Integer i){
-        this.dayIndex = i;
     }
 }

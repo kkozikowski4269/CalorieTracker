@@ -1,25 +1,15 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.example.FoodItem;
-import org.example.Meal;
-
 
 /**
  *
@@ -31,7 +21,8 @@ public class DayDAO implements DAO<Day>
     private ArrayList<Day> days;
     private String fName;
     private File file;
-    private static DayDAO dao = new DayDAO();
+    private static final DayDAO dao = new DayDAO();
+    private LocalDate date;
 
     private DayDAO(){
         this.fName = null;
@@ -79,11 +70,6 @@ public class DayDAO implements DAO<Day>
         return null;
     }
 
-    public boolean add(Day day) {
-        this.days.add(day);
-        return true;
-    }
-
     @Override
     public boolean delete(Day day) {
         return false;
@@ -111,7 +97,7 @@ public class DayDAO implements DAO<Day>
         return true;
     }
 
-    public boolean saveAll(){
+    public void saveAll(){
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         try {
             FileWriter fileWriter = new FileWriter(this.fName, false);
@@ -123,6 +109,13 @@ public class DayDAO implements DAO<Day>
         }catch(IOException e){
             System.err.println("Failed to save data: " + e);
         }
-        return true;
+    }
+
+    public void setDate(LocalDate date){
+        this.date = date;
+    }
+
+    public LocalDate getDate(){
+        return this.date;
     }
 }

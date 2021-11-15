@@ -23,10 +23,11 @@ public class Meal
         this.calories = 0;
     }
     @JsonIgnore
-    public static final int getNumMeals()
+    public static int getNumMeals()
     {
         return numMeals;
     }
+
     @JsonIgnore
     public static void setNumMeals(int num)
     {
@@ -70,6 +71,7 @@ public class Meal
     {
         this.foodItems.removeAll(foodItems);
     }
+
     @JsonIgnore
     public final FoodItem getItem(int pos)
     {
@@ -100,6 +102,11 @@ public class Meal
     public void setFoodItems(ArrayList<FoodItem> foodItems)
     {
         this.foodItems = foodItems;
+        int calories = 0;
+        for(FoodItem item : this.foodItems){
+            calories += item.getCalories();
+        }
+        this.setCalories(calories);
     }
 
     public final ArrayList<FoodItem> getFoodItems()
