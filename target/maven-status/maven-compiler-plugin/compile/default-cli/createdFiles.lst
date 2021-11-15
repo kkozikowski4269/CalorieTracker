@@ -1,0 +1,8 @@
+org\example\controller\DAO.class
+module-info.class
+org\example\model\Meal.class
+org\example\model\FoodItem.class
+org\example\App.class
+org\example\PrimaryController.class
+org\example\Util.class
+org\example\AddMealController.class

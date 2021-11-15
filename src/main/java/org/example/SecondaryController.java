@@ -1,10 +1,7 @@
 package org.example;
 
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import javafx.event.ActionEvent;
@@ -15,10 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.model.FoodItem;
 
 public class SecondaryController {
     @FXML
@@ -36,6 +31,8 @@ public class SecondaryController {
     private Button cancelButton;
 
     @FXML
+    private TextField mealNameTextField;
+    @FXML
     private TextField itemNameTextField;
     @FXML
     private TextField calorieTextField;
@@ -44,7 +41,10 @@ public class SecondaryController {
 
     @FXML
     private VBox buttonVBox;
+
+    private String date;
     private Stage stage;
+    private Integer dayIndex;
 
     @FXML
     private boolean addItem(){
@@ -90,12 +90,41 @@ public class SecondaryController {
     }
 
     @FXML
+    private void addMeal(ActionEvent event){
+        Meal meal = new Meal(this.mealNameTextField.getText());
+
+        for(FoodItem i : foodList.getItems()) {
+            meal.addItem(i);
+        }
+        DayDAO dao = DayDAO.getInstance();
+        if(this.dayIndex != null) {
+            dao.getAll().get(this.dayIndex).addMeal(meal);
+        }else{
+            Day day = new Day("Day");
+            day.setDate(this.date);
+            day.addMeal(meal);
+            dao.getAll().add(day);
+        }
+        dao.saveAll();
+        try {
+            close(event);
+        }catch (IOException e){
+            System.err.println(e);
+        }
+
+    }
+
+    @FXML
     public void close(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
+        PrimaryController primaryController = loader.getController();
+        String[] dateDate = this.date.split("-");
+        primaryController.setDate(Integer.parseInt(dateDate[0]),Integer.parseInt(dateDate[1]),Integer.parseInt(dateDate[2]));
     }
 
+    // save the update to a food item
     private void save(){
         FoodItem selection = foodList.getSelectionModel().getSelectedItem();
         if(addItem()){
@@ -104,11 +133,22 @@ public class SecondaryController {
         }
     }
 
+    // cancel the update to a food item
     private void cancel(){
         buttonVBox.getChildren().setAll(addItemButton,removeItemButton,updateItemButton,addMealButton,closeButton);
         itemNameTextField.clear();
         calorieTextField.clear();
         foodList.getSelectionModel().clearSelection();
         foodList.setDisable(false);
+    }
+
+    public void setDate(String date){
+        this.date = date;
+    }
+
+    public String getDate() { return this.date; }
+
+    public void setDayIndex(Integer i){
+        this.dayIndex = i;
     }
 }

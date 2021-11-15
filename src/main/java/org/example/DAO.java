@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example;
 
 import java.util.ArrayList;
 
@@ -10,9 +10,7 @@ public interface DAO<T>
 {
     ArrayList<T> getAll();
     T get(int pos);
-    boolean add(T t);
     boolean delete(T t);
     boolean update(T t);
     boolean save(T t);
-    boolean saveAll();
 }
