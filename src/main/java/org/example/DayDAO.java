@@ -77,6 +77,7 @@ public class DayDAO implements DAO<Day>
     public boolean delete(Day day) {
         if(this.days.contains(day)) {
             this.days.remove(day);
+            this.saveAll();
             return true;
         }
         return false;
@@ -86,6 +87,7 @@ public class DayDAO implements DAO<Day>
     public boolean update(Day day, Day newDay) {
         if (this.days.contains(day)) {
             this.days.set(this.days.indexOf(day),newDay);
+            this.saveAll();
             return true;
         }
         return false;

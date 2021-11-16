@@ -3,6 +3,7 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -83,8 +84,19 @@ public class PrimaryController {
     }
 
     @FXML
-    public void deleteMeal() {
-
+    public void deleteMeal(){
+        this.currentMealSelection = this.mealList.getSelectionModel().getSelectedItem();
+        System.out.println(this.currentMealSelection);
+        DayDAO dao = DayDAO.getInstance();
+        ArrayList<Day> days = dao.getAll();
+        int index = days.indexOf(this.currentDaySelection);
+        days.get(index).getMeals().remove(this.currentMealSelection);
+        dao.saveAll();
+        this.mealList.getItems().remove(this.currentMealSelection);
+//        if(this.mealList.getItems().isEmpty()){
+//            dao.delete(this.getCurrentDaySelection());
+//        }
+//        System.out.println(this.getCurrentDaySelection());
     }
 
     @FXML
