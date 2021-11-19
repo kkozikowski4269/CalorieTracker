@@ -97,13 +97,13 @@ public class AddMealController {
         DayDAO dao = DayDAO.getInstance();
         if(this.day != null) {
             this.day.addMeal(meal);
+            dao.update(this.day);
         }else{
-            Day day = new Day(this.date.getDayOfWeek().toString());
-            day.setDate(this.date.toString());
-            day.addMeal(meal);
-            dao.getAll().add(day);
+            this.day = new Day(this.date.getDayOfWeek().toString());
+            this.day.setDate(this.date.toString());
+            this.day.addMeal(meal);
+            dao.save(this.day);
         }
-        dao.saveAll();
         close(event);
     }
 

@@ -2,6 +2,7 @@ package org.example;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -70,6 +71,19 @@ public class Meal
     public void removeAll()
     {
         this.foodItems.removeAll(foodItems);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Meal)) return false;
+        Meal meal = (Meal) o;
+        return getCalories() == meal.getCalories() && Objects.equals(getName(), meal.getName()) && Objects.equals(getFoodItems(), meal.getFoodItems());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getFoodItems(), getCalories());
     }
 
     @JsonIgnore

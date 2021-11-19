@@ -77,33 +77,24 @@ public class DayDAO implements DAO<Day>
     public boolean delete(Day day) {
         if(this.days.contains(day)) {
             this.days.remove(day);
+            this.saveAll();
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean update(Day day, Day newDay) {
+    public boolean update(Day day) {
         if (this.days.contains(day)) {
-            this.days.set(this.days.indexOf(day),newDay);
+            this.saveAll();
             return true;
         }
         return false;
     }
     @Override
     public boolean save(Day day) {
-        ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            FileWriter fileWriter = new FileWriter(this.fName, false);
-            SequenceWriter seqWriter = mapper.writer().writeValuesAsArray(fileWriter);
-            for (Day d : this.days) {
-                seqWriter.write(d);
-            }
-            seqWriter.write(day);
-            seqWriter.close();
-        }catch(IOException e){
-            System.err.println("Failed to save data: " + e);
-        }
+        this.days.add(day);
+        this.saveAll();
         return true;
     }
 
