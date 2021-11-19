@@ -94,6 +94,7 @@ public class ViewMealController {
 
     @FXML
     public void updateMeal(ActionEvent event) throws IOException {
+        this.meal.setName(this.mealNameTextField.getText());
         this.meal.setFoodItems(new ArrayList<>(this.foodList.getItems()));
         DayDAO.getInstance().saveAll();
         this.close(event);

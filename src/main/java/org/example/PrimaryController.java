@@ -91,12 +91,12 @@ public class PrimaryController {
         ArrayList<Day> days = dao.getAll();
         int index = days.indexOf(this.currentDaySelection);
         days.get(index).getMeals().remove(this.currentMealSelection);
-        dao.saveAll();
         this.mealList.getItems().remove(this.currentMealSelection);
-//        if(this.mealList.getItems().isEmpty()){
-//            dao.delete(this.getCurrentDaySelection());
-//        }
-//        System.out.println(this.getCurrentDaySelection());
+        if(this.mealList.getItems().isEmpty()){
+            dao.delete(this.getCurrentDaySelection());
+        }
+        this.setDate(this.datePicker.getValue());
+        this.currentDaySelection = null;
     }
 
     @FXML
