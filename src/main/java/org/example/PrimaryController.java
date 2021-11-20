@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -29,6 +30,8 @@ public class PrimaryController {
     private ListView<Meal> mealList;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private Label calorieLabel;
 
     private Stage stage;
     private Meal currentMealSelection = null;
@@ -124,9 +127,11 @@ public class PrimaryController {
         if(dayIndex == -1) {
             currentDaySelection = null;
             this.mealList.getItems().clear();
+            this.calorieLabel.setText("0");
         }else{
             currentDaySelection = dao.get(dayIndex);
             this.mealList.setItems(FXCollections.observableArrayList(currentDaySelection.getMeals()));
+            this.calorieLabel.setText(String.valueOf(this.currentDaySelection.getCalories()));
         }
     }
 
