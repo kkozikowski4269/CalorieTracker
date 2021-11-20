@@ -73,6 +73,16 @@ public class DayDAO implements DAO<Day>
         }
     }
 
+    public Day get(LocalDate date){
+        if(this.days != null && this.days.size() > 0){
+            Day day = new Day();
+            day.setDate(date.toString());
+            return this.days.get(this.days.indexOf(day));
+        }else{
+            return null;
+        }
+    }
+
     @Override
     public boolean delete(Day day) {
         if(this.days.contains(day)) {
