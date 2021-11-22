@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,13 +56,13 @@ public class DayDAO implements DAO<Day>
         this.days = new ArrayList<>();
         if(this.file.length() > 0) {
             try {
-                days = mapper.readValue(this.file, new TypeReference<>() {
+                this.days = mapper.readValue(this.file, new TypeReference<>() {
                 });
             }catch (IOException e){
                 System.err.println("Error fetching data: " + e);
             }
         }
-        return days;
+        return this.days;
     }
 
     @Override
@@ -99,6 +100,7 @@ public class DayDAO implements DAO<Day>
     }
 
     public void saveAll(){
+        Collections.sort(this.days);
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         try {
             FileWriter fileWriter = new FileWriter(this.fName, false);

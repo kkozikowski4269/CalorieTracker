@@ -99,7 +99,7 @@ public class AddMealController {
             this.day.addMeal(meal);
             dao.update(this.day);
         }else{
-            this.day = new Day(this.date.getDayOfWeek().toString());
+            this.day = new Day(this.date);
             this.day.setDate(this.date.toString());
             this.day.addMeal(meal);
             dao.save(this.day);

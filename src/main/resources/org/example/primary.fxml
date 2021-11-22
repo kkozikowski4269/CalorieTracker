@@ -78,5 +78,6 @@
          </cursor>
       </Button>
       <DatePicker fx:id="datePicker" layoutX="134.0" layoutY="105.0" onAction="#pickDate" prefHeight="25.0" prefWidth="118.0" />
+      <Button fx:id="test" layoutX="15.0" layoutY="53.0" mnemonicParsing="false" onAction="#test" text="Button" />
    </children>
 </AnchorPane>

@@ -7,17 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Day{
+public class Day implements Comparable<Day>{
     private String name;
     private List<Meal> meals;
     private String date;
 
     public Day(){}
 
-    public Day(String name){
-        this.name = name;
+    public Day(LocalDate date){
+        this.name = date.getDayOfWeek().toString();
         this.meals = new ArrayList<>();
-        this.date = LocalDate.now().toString();
+        this.date = date.toString();
     }
 
     public void addMeal(Meal meal){
@@ -60,6 +60,7 @@ public class Day{
     @Override
     public String toString() {
         return "Day{" +
+                "date='" + date + '\'' +
                 "name='" + name + '\'' +
                 ", meals=" + meals +
                 '}';
@@ -76,5 +77,10 @@ public class Day{
     @Override
     public int hashCode() {
         return Objects.hash(getDate());
+    }
+
+    @Override
+    public int compareTo(Day o) {
+        return this.getDate().compareTo(o.getDate());
     }
 }

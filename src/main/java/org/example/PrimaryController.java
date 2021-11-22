@@ -3,8 +3,8 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
-import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -12,10 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 public class PrimaryController {
@@ -26,6 +23,8 @@ public class PrimaryController {
     private Button viewMealButton;
     @FXML
     private Button closeButton;
+    @FXML
+    private Button test;
     @FXML
     private ListView<Meal> mealList;
     @FXML
@@ -41,7 +40,14 @@ public class PrimaryController {
     @FXML
     public void initialize(){
         DayDAO dao = DayDAO.getInstance();
-
+        // disable dates later than the current date
+        this.datePicker.setDayCellFactory(param -> new DateCell(){
+            @Override
+            public void updateItem(LocalDate date, boolean empty){
+                super.updateItem(date,empty);
+                setDisable(empty || date.compareTo(LocalDate.now()) > 0);
+            }
+        });
         // setValue of DatePicker to today's date when opening the first time, otherwise use dao to keep track of the
         // when switching back from another scene
         if(getDate() == null) {
@@ -61,6 +67,16 @@ public class PrimaryController {
         }catch (IOException e){
             System.err.println("Could not set Data: " + e);
         }
+    }
+
+    @FXML
+    public void test(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("chartView.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene chartViewScene = new Scene(loader.load());
+        stage.setScene(chartViewScene);
+        ChartViewController chartViewController = loader.getController();
+        chartViewController.loadData(LocalDate.now().minusWeeks(1),LocalDate.now());
     }
 
     @FXML
