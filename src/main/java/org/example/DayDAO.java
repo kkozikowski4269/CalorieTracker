@@ -3,7 +3,6 @@ package org.example;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  */
 public class DayDAO implements DAO<Day>
 {
-
     private ArrayList<Day> days;
     private String fName;
     private File file;
