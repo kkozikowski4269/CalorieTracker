@@ -107,15 +107,15 @@ public class PrimaryController {
         this.currentMealSelection = this.mealList.getSelectionModel().getSelectedItem();
         System.out.println(this.currentMealSelection);
         DayDAO dao = DayDAO.getInstance();
-        ArrayList<Day> days = dao.getAll();
-        int index = days.indexOf(this.currentDaySelection);
-        days.get(index).getMeals().remove(this.currentMealSelection);
+        dao.get(this.currentDateSelection).getMeals().remove(this.currentMealSelection);
         this.mealList.getItems().remove(this.currentMealSelection);
         if(this.mealList.getItems().isEmpty()){
             dao.delete(this.getCurrentDaySelection());
+            //this.setDate(this.datePicker.getValue());
+            this.currentDaySelection = null;
+        }else{
+            dao.update(this.currentDaySelection);
         }
-        this.setDate(this.datePicker.getValue());
-        this.currentDaySelection = null;
     }
 
     @FXML
@@ -157,6 +157,10 @@ public class PrimaryController {
 
     public Day getCurrentDaySelection(){
         return this.currentDaySelection;
+    }
+
+    public void setCurrentDaySelection(Day day){
+        this.currentDaySelection = day;
     }
 
     public void setDate(LocalDate date){
