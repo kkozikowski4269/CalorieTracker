@@ -1,4 +1,4 @@
-package org.example;
+package org.example.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -15,6 +15,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.App;
+import org.example.DayDAO;
+import org.example.controller.PrimaryController;
+import org.example.model.Day;
+import org.example.model.FoodItem;
+import org.example.model.Meal;
 
 public class AddMealController{
     @FXML
@@ -109,7 +115,7 @@ public class AddMealController{
 
     @FXML
     public void close(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("primary.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         PrimaryController primaryController = loader.getController();
