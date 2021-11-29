@@ -1,12 +1,12 @@
-package org.example;
+package org.example.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 public class Day implements Comparable<Day>{
     private String name;
     private List<Meal> meals;

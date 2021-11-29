@@ -1,4 +1,4 @@
-package org.example;
+package org.example.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.example.App;
+import org.example.DayDAO;
+import org.example.model.Day;
+import org.example.model.Meal;
 
 public class PrimaryController {
 
@@ -58,7 +62,7 @@ public class PrimaryController {
 
     @FXML
     public void test(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("chartView.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("chartView.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene chartViewScene = new Scene(loader.load());
         stage.setScene(chartViewScene);
@@ -68,7 +72,7 @@ public class PrimaryController {
 
     @FXML
     public void openMealAdder(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("addMeal.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("addMeal.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene addMealScene = new Scene(loader.load());
         stage.setScene(addMealScene);
@@ -81,7 +85,7 @@ public class PrimaryController {
     public void openMealViewer(ActionEvent event) throws IOException {
         Meal meal = this.mealList.getSelectionModel().getSelectedItem();
         if(meal != null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("viewMeal.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("viewMeal.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene viewMealScene = new Scene(loader.load());
             ViewMealController viewMealController = loader.getController();
