@@ -9,6 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -37,7 +38,7 @@ public class PrimaryController {
     private Stage stage;
 
     @FXML
-    public void initialize(){
+    public void initialize() throws IOException {
         DayDAO dao = DayDAO.getInstance();
         // disable dates later than the current date
         this.datePicker.setDayCellFactory(param -> new DateCell(){
@@ -61,18 +62,8 @@ public class PrimaryController {
     }
 
     @FXML
-    public void test(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("chartView.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene chartViewScene = new Scene(loader.load());
-        stage.setScene(chartViewScene);
-        ChartViewController chartViewController = loader.getController();
-        chartViewController.loadData(LocalDate.now().minusWeeks(1),LocalDate.now());
-    }
-
-    @FXML
     public void openMealAdder(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("addMeal.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/addMeal.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene addMealScene = new Scene(loader.load());
         stage.setScene(addMealScene);
@@ -85,7 +76,7 @@ public class PrimaryController {
     public void openMealViewer(ActionEvent event) throws IOException {
         Meal meal = this.mealList.getSelectionModel().getSelectedItem();
         if(meal != null) {
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("viewMeal.fxml"));
+            FXMLLoader loader = new FXMLLoader(App.class.getResource("view/viewMeal.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene viewMealScene = new Scene(loader.load());
             ViewMealController viewMealController = loader.getController();
@@ -131,6 +122,20 @@ public class PrimaryController {
         }else{
             this.mealList.setItems(FXCollections.observableArrayList(day.getMeals()));
             this.calorieLabel.setText(String.valueOf(day.getCalories()));
+        }
+    }
+
+    @FXML
+    public void openChartViewer(ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/chartView.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        try {
+            Scene chartViewScene = new Scene(loader.load());
+            stage.setScene(chartViewScene);
+            ChartViewController chartViewController = loader.getController();
+            chartViewController.loadData(LocalDate.now().minusWeeks(1), LocalDate.now());
+        }catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

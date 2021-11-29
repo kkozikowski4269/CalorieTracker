@@ -115,7 +115,7 @@ public class AddMealController{
 
     @FXML
     public void close(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(App.class.getResource("primary.fxml"));
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/primary.fxml"));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         PrimaryController primaryController = loader.getController();

@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -17,9 +19,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 450, 400);
-//        scene = new Scene(loadFXML("chartView"), 700, 700);
-
+        Parent root = loadFXML("view/primary");
+        scene = new Scene(root, 450, 400);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

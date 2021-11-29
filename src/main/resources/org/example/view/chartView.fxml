@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -7,22 +9,64 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="783.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.ChartViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="520.0" prefWidth="720.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.ChartViewController">
    <children>
-      <LineChart fx:id="lineChart" animated="false" layoutX="6.0" layoutY="104.0" legendSide="RIGHT" prefHeight="400.0" prefWidth="659.0">
+      <LineChart fx:id="lineChart" animated="false" layoutX="6.0" layoutY="104.0" prefHeight="400.0" prefWidth="659.0">
         <xAxis>
-          <CategoryAxis label="Date" side="BOTTOM" />
+          <CategoryAxis label="Date" side="BOTTOM" tickLabelFill="WHITE" />
         </xAxis>
         <yAxis>
-          <NumberAxis label="Calories" side="LEFT" />
+          <NumberAxis label="Calories" side="LEFT" tickLabelFill="WHITE" />
         </yAxis>
       </LineChart>
-      <DatePicker fx:id="startDate" layoutX="85.0" layoutY="54.0" />
-      <DatePicker fx:id="endDate" layoutX="293.0" layoutY="54.0" />
-      <Button fx:id="viewButton" layoutX="504.0" layoutY="54.0" mnemonicParsing="false" text="View" />
-      <Label layoutX="85.0" layoutY="37.0" text="Start Date" />
-      <Label layoutX="293.0" layoutY="37.0" text="End Date" />
-      <Button fx:id="backButton" layoutX="580.0" layoutY="54.0" mnemonicParsing="false" onAction="#back" text="Back" />
+      <HBox layoutX="69.0" layoutY="18.0" prefHeight="100.0" prefWidth="329.0">
+         <children>
+            <VBox prefHeight="92.0" prefWidth="242.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label prefWidth="75.0" text="Start Date" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="startDate" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label prefWidth="75.0" text="End Date" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="endDate" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="100.0" prefWidth="112.0" spacing="22.0">
+               <children>
+                  <Button fx:id="viewButton" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="View" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="27.0" prefWidth="100.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Back" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
