@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
-public class ViewMealController {
+public class ViewMealController{
     @FXML
     TextField mealNameTextField;
     @FXML
@@ -96,7 +96,8 @@ public class ViewMealController {
     public void updateMeal(ActionEvent event) throws IOException {
         this.meal.setName(this.mealNameTextField.getText());
         this.meal.setFoodItems(new ArrayList<>(this.foodList.getItems()));
-        DayDAO.getInstance().saveAll();
+        DayDAO dao = DayDAO.getInstance();
+        dao.save(dao.get(this.date));
         this.close(event);
     }
 
@@ -106,7 +107,7 @@ public class ViewMealController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         PrimaryController primaryController = loader.getController();
-        primaryController.setDate(this.date);
+        primaryController.loadData(this.date);
     }
 
     public void loadData(Meal meal, LocalDate date){
@@ -116,10 +117,6 @@ public class ViewMealController {
         this.foodList.setItems(FXCollections.observableArrayList(meal.getFoodItems()));
     }
 
-    public void setDate(LocalDate date){
-        this.date = date;
-    }
-
     public LocalDate getDate() { return this.date; }
 
     // save the update to a food item
@@ -127,11 +124,11 @@ public class ViewMealController {
         FoodItem selection = foodList.getSelectionModel().getSelectedItem();
         if(addItem()){
             foodList.getItems().remove(selection);
-            cancel();
+            this.cancel();
         }
     }
 
-    // cancel the update to a food item
+//     cancel the update to a food item
     private void cancel(){
         buttonVBox.getChildren().setAll(addItemButton,removeItemButton,updateItemButton,updateMealButton,closeButton);
         itemNameTextField.clear();

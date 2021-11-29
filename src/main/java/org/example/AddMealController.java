@@ -16,7 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class AddMealController {
+public class AddMealController{
     @FXML
     private Button addItemButton;
     @FXML
@@ -113,7 +113,7 @@ public class AddMealController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         PrimaryController primaryController = loader.getController();
-        primaryController.setDate(this.date);
+        primaryController.loadData(this.date);
     }
 
     // save the update to a food item
@@ -126,7 +126,7 @@ public class AddMealController {
     }
 
     // cancel the update to a food item
-    private void cancel(){
+    public void cancel(){
         buttonVBox.getChildren().setAll(addItemButton,removeItemButton,updateItemButton,addMealButton,closeButton);
         itemNameTextField.clear();
         calorieTextField.clear();
