@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class ChartViewController {
     @FXML
@@ -50,29 +51,29 @@ public class ChartViewController {
     }
 
     public void loadData(LocalDate start, LocalDate end){
-        if(end.compareTo(start) < 0){
-            end = start;
-            this.endDate.setValue(end);
-        }
-        this.viewButton.requestFocus();
-        lineChart.getData().clear();
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
-        List<Day> days = DayDAO.getInstance().getAll();
-        while(start.compareTo(end) < 1){
-            if(days.contains(new Day(start))){
-                Day day = days.get(days.indexOf(new Day(start)));
-                series.getData().add(new XYChart.Data<>(day.getDate(), day.getCalories()));
-            }else{
-                series.getData().add(new XYChart.Data<>(start.toString(), 0));
-            }
-            series2.getData().add(new XYChart.Data<>(start.toString(), 500));
-            start=start.plusDays(1);
-        }
-
-        series.setName("Calories Consumed");
-        series2.setName("Calorie Limit");
-        lineChart.getData().addAll(series, series2);
+//        if(end.compareTo(start) < 0){
+//            end = start;
+//            this.endDate.setValue(end);
+//        }
+//        this.viewButton.requestFocus();
+//        lineChart.getData().clear();
+//        XYChart.Series<String, Number> series = new XYChart.Series<>();
+//        XYChart.Series<String, Number> series2 = new XYChart.Series<>();
+//
+//        while(start.compareTo(end) < 1){
+//            if(days.containsKey(start.toString())){
+//                Day day = days.get(start.toString());
+//                series.getData().add(new XYChart.Data<>(day.getDate(), day.getCalories()));
+//            }else{
+//                series.getData().add(new XYChart.Data<>(start.toString(), 0));
+//            }
+//            series2.getData().add(new XYChart.Data<>(start.toString(), 500));
+//            start=start.plusDays(1);
+//        }
+//
+//        series.setName("Calories Consumed");
+//        series2.setName("Calorie Limit");
+//        lineChart.getData().addAll(series, series2);
     }
 
     @FXML
@@ -81,6 +82,6 @@ public class ChartViewController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(loader.load()));
         PrimaryController primaryController = loader.getController();
-        primaryController.setDate(LocalDate.now());
+        primaryController.loadData(LocalDate.now());
     }
 }

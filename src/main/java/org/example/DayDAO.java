@@ -3,8 +3,8 @@ package org.example;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.time.LocalDate;
+import java.util.*;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +15,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
  *
  * @author kfkoz
  */
-public class DayDAO implements DAO<Day>
-{
-    private ArrayList<Day> days;
+public class DayDAO implements DAO<Day, LocalDate>{
+    private Map<String,Day> dayMap;
     private String fName;
     private File file;
     private static final DayDAO dao = new DayDAO();
@@ -29,7 +28,7 @@ public class DayDAO implements DAO<Day>
 
     public void setFile(File file){
         this.file = file;
-        this.days = getAll();
+        this.dayMap = this.listToMap(getAll());
     }
 
     public File getFile(){
@@ -48,35 +47,25 @@ public class DayDAO implements DAO<Day>
         return dao;
     }
 
-    @Override
+
     public ArrayList<Day> getAll() {
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        this.days = new ArrayList<>();
         if(this.file.length() > 0) {
             try {
-                this.days = mapper.readValue(this.file, new TypeReference<>() {
+                return mapper.readValue(this.file, new TypeReference<>() {
                 });
             }catch (IOException e){
                 System.err.println("Error fetching data: " + e);
             }
         }
-        return this.days;
+
+        return null;
     }
 
     @Override
-    public Day get(int pos) {
-        if(this.days != null && this.days.size() > 0){
-            return this.days.get(pos);
-        }else{
-            return null;
-        }
-    }
-
-    public Day get(LocalDate date){
-        if(this.days != null && this.days.size() > 0){
-            Day day = new Day();
-            day.setDate(date.toString());
-            return this.days.get(this.days.indexOf(day));
+    public Day get(LocalDate date) {
+        if(this.dayMap != null && !this.dayMap.isEmpty()){
+            return this.dayMap.get(date.toString());
         }else{
             return null;
         }
@@ -84,41 +73,48 @@ public class DayDAO implements DAO<Day>
 
     @Override
     public boolean delete(Day day) {
-        if(this.days.contains(day)) {
-            this.days.remove(day);
-            this.saveAll();
-            return true;
-        }
-        return false;
+        return this.dayMap.remove(day.getDate(),day);
     }
 
     @Override
     public boolean update(Day day) {
-        if (this.days.contains(day)) {
-            this.saveAll();
+        if(this.dayMap.containsKey(day.getDate())) {
+            this.dayMap.replace(day.getDate(), day);
             return true;
         }
         return false;
     }
+
     @Override
     public boolean save(Day day) {
-        this.days.add(day);
-        this.saveAll();
-        return true;
+        if(!this.dayMap.containsKey(day.getDate())) {
+            this.dayMap.put(day.getDate(), day);
+            return true;
+        }
+        return false;
     }
 
     public void saveAll(){
-        Collections.sort(this.days);
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         try {
             FileWriter fileWriter = new FileWriter(this.fName, false);
             SequenceWriter seqWriter = mapper.writer().writeValuesAsArray(fileWriter);
-            for (Day d : this.days) {
+            for (Day d : this.dayMap.values()) {
                 seqWriter.write(d);
             }
             seqWriter.close();
         }catch(IOException e){
             System.err.println("Failed to save data: " + e);
         }
+    }
+
+    private Map<String,Day> listToMap(List<Day> dayList){
+        Map<String,Day> map = new HashMap<>();
+        if(dayList != null) {
+            for (Day d : dayList) {
+                map.put(d.getDate(), d);
+            }
+        }
+        return map;
     }
 }
