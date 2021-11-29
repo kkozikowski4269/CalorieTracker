@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.App;
 import org.example.DayDAO;

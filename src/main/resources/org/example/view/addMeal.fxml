@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.AddMealController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #333;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.AddMealController">
    <children>
       <Label layoutX="147.0" layoutY="14.0" text="Add A New Meal" textFill="WHITE">
          <font>
@@ -23,11 +28,11 @@
       <ListView fx:id="foodList" layoutX="248.0" layoutY="188.0" prefHeight="168.0" prefWidth="167.0" />
       <VBox fx:id="buttonVBox" layoutX="40.0" layoutY="188.0" prefHeight="183.0" prefWidth="149.0" spacing="10.0">
          <children>
-            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" text="Add Item" />
-            <Button fx:id="removeItemButton" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
-            <Button fx:id="updateItemButton" mnemonicParsing="false" onAction="#updateItem" prefHeight="25.0" prefWidth="149.0" text="Update Item" />
-            <Button fx:id="addMealButton" mnemonicParsing="false" onAction="#addMeal" prefHeight="25.0" prefWidth="149.0" text="Add Meal" />
-            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" text="Close" />
+            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Add Item" textFill="WHITE" />
+            <Button fx:id="removeItemButton" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Remove Item" textFill="WHITE" />
+            <Button fx:id="updateItemButton" mnemonicParsing="false" onAction="#updateItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Update Item" textFill="WHITE" />
+            <Button fx:id="addMealButton" mnemonicParsing="false" onAction="#addMeal" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px;" text="Add Meal" textFill="WHITE" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px;" text="Close" textFill="WHITE" />
          </children>
       </VBox>
    </children>

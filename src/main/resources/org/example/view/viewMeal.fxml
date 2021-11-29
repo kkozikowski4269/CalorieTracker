@@ -22,11 +22,11 @@
       <ListView fx:id="foodList" layoutX="248.0" layoutY="188.0" prefHeight="168.0" prefWidth="167.0" />
       <VBox fx:id="buttonVBox" layoutX="40.0" layoutY="188.0" prefHeight="183.0" prefWidth="149.0" spacing="10.0">
          <children>
-            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" text="Add Item" />
-            <Button fx:id="removeItemButton" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" text="Remove Item" />
-            <Button fx:id="updateItemButton" mnemonicParsing="false" onAction="#updateItem" prefHeight="25.0" prefWidth="149.0" text="Update Item" />
-            <Button fx:id="updateMealButton" mnemonicParsing="false" onAction="#updateMeal" prefHeight="25.0" prefWidth="149.0" text="Update Meal" />
-            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" text="Close" />
+            <Button fx:id="addItemButton" mnemonicParsing="false" onAction="#addItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Add Item" textFill="WHITE" />
+            <Button fx:id="removeItemButton" mnemonicParsing="false" onAction="#removeItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Remove Item" textFill="WHITE" />
+            <Button fx:id="updateItemButton" mnemonicParsing="false" onAction="#updateItem" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Update Item" textFill="WHITE" />
+            <Button fx:id="updateMealButton" mnemonicParsing="false" onAction="#updateMeal" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Update Meal" textFill="WHITE" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: linear-gradient(#666,#555,#333); -fx-border-color: linear-gradient(#aaa,#555); -fx-border-radius: 5px; -fx-background-radius: 5px;" text="Close" textFill="WHITE" />
          </children>
       </VBox>
    </children>
