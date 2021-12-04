@@ -12,8 +12,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.example.App;
 import org.example.DayDAO;
 import org.example.model.Day;
@@ -56,7 +59,11 @@ public class PrimaryController {
         }
 
         if(dao.getFile() == null){
-            dao.setFName("data.json");
+            File dataFile = new File("data.json");
+            if(!dataFile.exists()){
+                dataFile.createNewFile();
+            }
+            dao.setFName(dataFile.getName());
             dao.setFile(new File(dao.getFName()));
             this.loadData(this.datePicker.getValue());
         }
@@ -135,6 +142,22 @@ public class PrimaryController {
             stage.setScene(chartViewScene);
             ChartViewController chartViewController = loader.getController();
             chartViewController.loadData(LocalDate.now().minusWeeks(1), LocalDate.now());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void setDailyCalories(ActionEvent event){
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/setCalorieView.fxml"));
+        Stage popupStage = new Stage();
+        try{
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.initStyle(StageStyle.TRANSPARENT);
+            Scene setCalorieScene = new Scene(loader.load());
+            setCalorieScene.setFill(Color.TRANSPARENT);
+            popupStage.setScene(setCalorieScene);
+            popupStage.show();
         }catch (IOException e){
             e.printStackTrace();
         }
