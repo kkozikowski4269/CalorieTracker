@@ -8,12 +8,18 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.example.App;
 import org.example.DayDAO;
 import org.example.model.Day;
@@ -35,6 +41,11 @@ public class PrimaryController {
     private DatePicker datePicker;
     @FXML
     private Label calorieLabel;
+    @FXML
+    private AnchorPane anchorPane;
+
+    private final String CALORIE_LIMIT = "src/main/resources/data_files/calorie_limit.txt";
+    private final String DATA_FILE = "src/main/resources/data_files/data.json";
 
     private Stage stage;
 
@@ -56,8 +67,12 @@ public class PrimaryController {
         }
 
         if(dao.getFile() == null){
-            dao.setFName("data.json");
-            dao.setFile(new File(dao.getFName()));
+            File dataFile = new File(DATA_FILE);
+            if(!dataFile.exists()){
+                dataFile.createNewFile();
+            }
+            //dao.setFName(dataFile.getName());
+            dao.setFile(dataFile);
             this.loadData(this.datePicker.getValue());
         }
     }
@@ -117,13 +132,27 @@ public class PrimaryController {
         DayDAO dao = DayDAO.getInstance();
         Day day = dao.get(date);
         this.datePicker.setValue(date);
+        Integer calorieLimit = dao.getCalorieLimit(this.CALORIE_LIMIT);
+        // if the calorie limit file is missing then create it and set the limit to 2000 by default
+        if(calorieLimit == null){
+            try {
+                calorieLimit = 2000;
+                dao.saveCalorieLimit(this.CALORIE_LIMIT,calorieLimit);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int currentCalories = 0;
         if(day == null) {
             this.mealList.getItems().clear();
             this.calorieLabel.setText("0");
         }else{
             this.mealList.setItems(FXCollections.observableArrayList(day.getMeals()));
             this.calorieLabel.setText(String.valueOf(day.getCalories()));
+            currentCalories = day.getCalories();
         }
+        this.setCalorieWarningColor(calorieLimit,currentCalories);
     }
 
     @FXML
@@ -137,6 +166,73 @@ public class PrimaryController {
             chartViewController.loadData(LocalDate.now().minusWeeks(1), LocalDate.now());
         }catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void setDailyCalories(ActionEvent event){
+        DayDAO dao = DayDAO.getInstance();
+
+        for(Node n : this.anchorPane.getChildren()){
+            n.setDisable(true);
+        }
+        VBox vBox = new VBox();
+        HBox top = new HBox();
+        HBox bottom = new HBox();
+
+        top.setAlignment(Pos.CENTER);
+        bottom.setAlignment(Pos.CENTER);
+
+        Label label = new Label("Daily Calorie Limit:");
+        TextField textField = new TextField();
+        textField.setText(String.valueOf(dao.getCalorieLimit(CALORIE_LIMIT)));
+        Button setButton = new Button("Set");
+        Button cancelButton = new Button("Cancel");
+
+        top.getChildren().addAll(label,textField);
+        bottom.getChildren().addAll(setButton,cancelButton);
+
+        vBox.setSpacing(10);
+        top.setSpacing(5);
+        bottom.setSpacing(10);
+
+        vBox.setPadding(new Insets(10));
+        vBox.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID,CornerRadii.EMPTY,new BorderWidths(2))));
+        vBox.setBackground(new Background(new BackgroundFill(Color.WHITE,CornerRadii.EMPTY, Insets.EMPTY)));
+        vBox.setPrefWidth(300);
+        vBox.setLayoutX((this.anchorPane.getWidth()/2)-(vBox.getPrefWidth()/2));
+        vBox.setLayoutY(this.anchorPane.getHeight()/4);
+
+        vBox.getChildren().addAll(top,bottom);
+        this.anchorPane.getChildren().add(vBox);
+
+        setButton.setOnAction(e -> {
+            try {
+                int calorieLimit = Integer.parseInt(textField.getText());
+                dao.saveCalorieLimit(CALORIE_LIMIT,calorieLimit);
+                int currentCals = Integer.parseInt(this.calorieLabel.getText());
+                this.setCalorieWarningColor(calorieLimit,currentCals);
+                cancelButton.fire();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        cancelButton.setOnAction(e -> {
+            this.anchorPane.getChildren().remove(vBox);
+            for(Node n : this.anchorPane.getChildren()){
+                n.setDisable(false);
+            }
+        });
+    }
+
+    public void setCalorieWarningColor(int limit, int current){
+        if(current > limit){
+            this.calorieLabel.setTextFill(Color.RED);
+        }else if((limit-current) <= limit*0.1){
+            this.calorieLabel.setTextFill(Color.YELLOW);
+        }else{
+            this.calorieLabel.setTextFill(Color.WHITE);
         }
     }
 }

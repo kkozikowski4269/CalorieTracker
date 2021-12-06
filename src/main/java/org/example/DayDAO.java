@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -18,12 +19,10 @@ import org.example.model.Day;
  */
 public class DayDAO implements DAO<Day, LocalDate>{
     private Map<String,Day> dayMap;
-    private String fName;
     private File file;
     private static final DayDAO dao = new DayDAO();
 
     private DayDAO(){
-        this.fName = null;
         this.file = null;
     }
 
@@ -34,14 +33,6 @@ public class DayDAO implements DAO<Day, LocalDate>{
 
     public File getFile(){
         return this.file;
-    }
-
-    public void setFName(String fName){
-        this.fName = fName;
-    }
-
-    public String getFName(){
-        return this.fName;
     }
 
     public static DayDAO getInstance(){
@@ -98,7 +89,7 @@ public class DayDAO implements DAO<Day, LocalDate>{
     public void saveAll(){
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            FileWriter fileWriter = new FileWriter(this.fName, false);
+            FileWriter fileWriter = new FileWriter(this.file, false);
             SequenceWriter seqWriter = mapper.writer().writeValuesAsArray(fileWriter);
             for (Day d : this.dayMap.values()) {
                 seqWriter.write(d);
@@ -117,5 +108,27 @@ public class DayDAO implements DAO<Day, LocalDate>{
             }
         }
         return map;
+    }
+
+    public Integer getCalorieLimit(String fileName){
+        try {
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+            int calLimit = Integer.parseInt(reader.nextLine());
+            reader.close();
+            return calLimit;
+        }catch (FileNotFoundException e){
+            return null;
+        }
+    }
+
+    public void saveCalorieLimit(String fileName, int calLimit) throws IOException {
+        File file = new File(fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileWriter writer = new FileWriter(file);
+        writer.write(String.valueOf(calLimit));
+        writer.close();
     }
 }

@@ -59,6 +59,7 @@ public class ChartViewController {
 
         this.viewButton.requestFocus();
         lineChart.getData().clear();
+        int calorieLimit = DayDAO.getInstance().getCalorieLimit("calorie_limit.txt");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         XYChart.Series<String, Number> series2 = new XYChart.Series<>();
@@ -72,7 +73,7 @@ public class ChartViewController {
             }else{
                 series.getData().add(new XYChart.Data<>(start.toString(), 0));
             }
-            series2.getData().add(new XYChart.Data<>(start.toString(), 500));
+            series2.getData().add(new XYChart.Data<>(start.toString(), calorieLimit));
             start=start.plusDays(1);
         }
 
