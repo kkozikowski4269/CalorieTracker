@@ -59,7 +59,7 @@ public class ChartViewController {
 
         this.viewButton.requestFocus();
         lineChart.getData().clear();
-        int calorieLimit = DayDAO.getInstance().getCalorieLimit("calorie_limit.txt");
+        int calorieLimit = DayDAO.getInstance().getCalorieLimit("src/main/resources/data_files/calorie_limit.txt");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         XYChart.Series<String, Number> series2 = new XYChart.Series<>();
