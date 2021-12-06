@@ -14,10 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.example.App;
 import org.example.DayDAO;
-import org.example.controller.PrimaryController;
 import org.example.model.Day;
 import org.example.model.FoodItem;
 import org.example.model.Meal;
@@ -53,8 +54,7 @@ public class AddMealController{
     private boolean addItem(){
         String itemName = itemNameTextField.getText().replace('-', ' ');
         String calories = calorieTextField.getText();
-        Pattern pattern = Pattern.compile("0*[1-9][0-9]*");
-        if(itemName.length() > 0 && calories.matches(pattern.pattern())) {
+        if(itemName.length() > 0 && calories.matches("0*[1-9][0-9]*")) {
             foodList.getItems().add(new FoodItem(itemName, Integer.parseInt(calories)));
             itemNameTextField.clear();
             calorieTextField.clear();
@@ -87,6 +87,8 @@ public class AddMealController{
             cancelButton.setStyle(addItemButton.getStyle());
             saveButton.setPrefWidth(addItemButton.getWidth());
             cancelButton.setPrefWidth(addItemButton.getWidth());
+            saveButton.setTextFill(Color.WHITE);
+            cancelButton.setTextFill(Color.WHITE);
             saveButton.setOnAction(event -> save());
             cancelButton.setOnAction(event -> cancel());
             buttonVBox.getChildren().setAll(saveButton, cancelButton);
@@ -95,22 +97,24 @@ public class AddMealController{
 
     @FXML
     private void addMeal(ActionEvent event) throws IOException {
-        Meal meal = new Meal(this.mealNameTextField.getText());
+        if(!this.mealNameTextField.getText().isEmpty() && !this.foodList.getItems().isEmpty()) {
+            Meal meal = new Meal(this.mealNameTextField.getText());
 
-        for(FoodItem i : foodList.getItems()) {
-            meal.addItem(i);
+            for (FoodItem i : foodList.getItems()) {
+                meal.addItem(i);
+            }
+            DayDAO dao = DayDAO.getInstance();
+            if (this.day != null) {
+                this.day.addMeal(meal);
+                dao.update(this.day);
+            } else {
+                this.day = new Day(this.date);
+                this.day.setDate(this.date.toString());
+                this.day.addMeal(meal);
+                dao.save(this.day);
+            }
+            close(event);
         }
-        DayDAO dao = DayDAO.getInstance();
-        if(this.day != null) {
-            this.day.addMeal(meal);
-            dao.update(this.day);
-        }else{
-            this.day = new Day(this.date);
-            this.day.setDate(this.date.toString());
-            this.day.addMeal(meal);
-            dao.save(this.day);
-        }
-        close(event);
     }
 
     @FXML
