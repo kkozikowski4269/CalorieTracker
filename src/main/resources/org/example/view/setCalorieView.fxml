@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" style="-fx-border-width: 2px; -fx-border-color: #999; -fx-border-insets: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px; -fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.controller.SetCalorieController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label text="Daily Calorie Limit:" />
+            <TextField fx:id="calorieLimitText" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+         <children>
+            <Button fx:id="setButton" mnemonicParsing="false" onAction="#setCalories" prefWidth="75.0" text="Set" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefWidth="75.0" text="Cancel" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

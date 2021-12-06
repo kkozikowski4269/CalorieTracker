@@ -7,9 +7,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.example.App;
 import org.example.DayDAO;
@@ -51,14 +53,30 @@ public class ViewMealController{
     private Meal meal;
 
     public void initialize(){
+        // https://stackoverflow.com/questions/53493111/javafx-wrapping-text-in-listview
+        foodList.setCellFactory(param -> new ListCell<>(){
+            @Override
+            protected void updateItem(FoodItem fi, boolean empty){
+                super.updateItem(fi,empty);
+                if(empty || fi == null){
+                    setGraphic(null);
+                    setText(null);
+                }else{
+                    setMinWidth(param.getWidth());
+                    setMaxWidth(param.getWidth());
+                    setPrefWidth(param.getWidth());
+                    setWrapText(true);
+                    setText(fi.getName());
+                }
+            }
+        });
     }
 
     @FXML
     public boolean addItem(){
         String itemName = itemNameTextField.getText().replace('-', ' ');
         String calories = calorieTextField.getText();
-        Pattern pattern = Pattern.compile("0*[1-9][0-9]*");
-        if(itemName.length() > 0 && calories.matches(pattern.pattern())) {
+        if(itemName.length() > 0 && calories.matches("0*[1-9][0-9]*")) {
             foodList.getItems().add(new FoodItem(itemName, Integer.parseInt(calories)));
             itemNameTextField.clear();
             calorieTextField.clear();
@@ -90,6 +108,8 @@ public class ViewMealController{
             cancelButton.setStyle(addItemButton.getStyle());
             saveButton.setPrefWidth(addItemButton.getWidth());
             cancelButton.setPrefWidth(addItemButton.getWidth());
+            saveButton.setTextFill(Color.WHITE);
+            cancelButton.setTextFill(Color.WHITE);
             saveButton.setOnAction(event -> save());
             cancelButton.setOnAction(event -> cancel());
             buttonVBox.getChildren().setAll(saveButton, cancelButton);
